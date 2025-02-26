@@ -6,3 +6,5 @@ This repo will be single source of truth for System Design.
 docker-compose up --build
 
 curl http://localhost
+
+docker logs nginx
