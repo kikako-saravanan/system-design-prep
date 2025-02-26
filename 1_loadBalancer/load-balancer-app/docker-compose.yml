@@ -27,3 +27,29 @@ services:
     depends_on:
       - server1
       - server2
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090" # Prometheus UI on http://localhost:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml # Mounts prometheus.yml, so Prometheus loads our configuration.Maps prometheus.yml from your local system to /etc/prometheus/ inside the container.
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml" # Ensures Prometheus uses our custom configuration file.
+  
+  # Since Nginx doesn’t expose metrics directly, we need an exporter.
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter
+    container_name: nginx-exporter
+    command: ["-nginx.scrape-uri=http://nginx:80/nginx_status"]
+    ports:
+      - "9113:9113" # Runs the exporter on port 9113, which Prometheus scrapes.
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+
+

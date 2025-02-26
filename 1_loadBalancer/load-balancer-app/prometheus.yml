@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 5s  # Collect metrics every 5 seconds
+
+scrape_configs:
+  - job_name: 'nginx'  # Job name for Nginx
+    static_configs:
+      - targets: ['nginx-exporter:9113']  # Prometheus scrapes from nginx-exporter
+
+  - job_name: 'backend'
+    static_configs:
+      - targets: ['server1:3001', 'server2:3002']  # Collects app metrics
